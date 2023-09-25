@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: installing python3 and pip3
+    package:
+      name:
+        - "{{ python_package }}"
+        - "{{ pip_package }}"
+      state: latest
+      update_cache: yes
+
+  - name: setting pip3 as default pip
+    when: ansible_pkg_mgr == ['apt','yum']
+    alternatives:
+      name: pip
+      path: /usr/bin/pip3
+      priority: 2
+
+  - name: installing java open-jdk
+    package:
+      name:
+        - "{{ java_package }}"
+    state: latest
+    update_cache: yes
